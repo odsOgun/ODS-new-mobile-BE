@@ -1,5 +1,5 @@
 import express from "express";
-import userRoute from "../ODS-new-mobile-BE/resources/user/routes/user.routes.js";
+import userRoute from "./resources/user/routes/user.routes.js";
 
 const app = express();
 
