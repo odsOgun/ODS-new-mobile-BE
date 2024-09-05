@@ -1,11 +1,17 @@
 import fs from "fs";
 import path from "path";
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import generateOTP from "../../../utils/lib/OtpMessage.js";
 import sendEmail from "../../../utils/email/email-sender.js";
 import User from "../models/user.js";
 import bcrypt from "bcryptjs";
 import { errorResMsg, successResMsg } from "../../../utils/lib/response.js";
 
+
+// Define __dirname for ES6
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;

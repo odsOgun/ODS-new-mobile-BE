@@ -8,11 +8,11 @@ const userSchema = new mongoose.Schema({
     },
     firstName: {
         type: String,
-        required: true
+        // required: true
     },
     lastName: {
         type: String,
-        required: true
+        // required: true
     },
     profilePicture: {
         type: String
@@ -42,6 +42,10 @@ const userSchema = new mongoose.Schema({
     externalLink: {
         type: [String]
     }
+},
+{
+  timestamps: true,
+  versionKey: false,
 });
 
 const User = mongoose.model('User', userSchema);

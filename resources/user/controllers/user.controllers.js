@@ -1,4 +1,6 @@
 import { errorResMsg, successResMsg } from "../../../utils/lib/response.js";
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import User from "../models/user.js";
 import { passwordHash, passwordCompare } from "../../../utils/lib/bcrypt.js";
 import { signUpSchema } from "../../../utils/validation/validation.js";
@@ -8,66 +10,68 @@ import generateOTP from "../../../utils/lib/OtpMessage.js";
 import sendEmail from "../../../utils/email/email-sender.js";
 import { createJwtToken } from "../../../middleware/isAuthenticated.js";
 
+
+// Define __dirname for ES6
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 export const signUp = async (req, res, next) => {
-    try {
-      const { email } = req.body;
-    //   const { error } = signUpSchema.validate(req.body);
-    //   if (error) {
-    //     return errorResMsg(res, 404, error.message);
-    //   }
-  
-      // Check if email is provided
-      if (!email) {
-        return errorResMsg(res, 400, "Email is required");
-      }
-  
-      // Check if the email is already registered
-      const checkEmail = await User.findOne({ email });
-      if (checkEmail) {
-        return errorResMsg(res, 400, "Email already registered");
-      }
-  
-      // Generate OTP
-      const otp = generateOTP(); // Generate OTP using the imported function
-      const url = `https://ogundigitalsummit.com/`;
-  
-      const htmlTemplate = fs.readFileSync(
-        path.join(__dirname, "../../../utils/HacktheJob/emailVerify.html"),
-        "utf8"
-      );
-  
-      const emailTemplate = htmlTemplate
-        .replace("{{email}}", email)
-        .replace("{{otp}}", otp)
-        .replace("{{url}}", url);
-  
-      // Send a verification email
-      await sendEmail(emailTemplate, "Verify Email", email);
-  
-      // Create a new user instance with only email and OTP
-      const newUser = new User({
-        email,
-        otp: otp, // Store the OTP in the user object
-      });
-  
-      // Save the new user to the database
-      const savedUser = await newUser.save();
-  
-      // Return success response
-      return successResMsg(res, 201, {
-        success: true,
-        user: savedUser,
-        message: "User created successfully. Please verify your email.",
-      });
-    } catch (error) {
-      console.error(error);
-      return errorResMsg(res, 500, {
-        error: error.message,
-        message: "Internal server error",
-      });
+  try {
+    const { email } = req.body;
+
+    // Check if email is provided
+    if (!email) {
+      return errorResMsg(res, 400, "Email is required");
     }
-  };
-  
+
+    // Check if the email is already registered
+    const checkEmail = await User.findOne({ email });
+    if (checkEmail) {
+      return errorResMsg(res, 400, "Email already registered");
+    }
+
+    // Generate OTP
+    const otp = generateOTP(); // Generate OTP using the imported function
+    const url = `https://ogundigitalsummit.com/`;
+
+    // Load email template
+    const htmlTemplate = fs.readFileSync(
+      path.join(__dirname, "../../../utils/templates/emailVerify.html"),
+      "utf8"
+    );
+
+    // Replace placeholders with actual values
+    const emailTemplate = htmlTemplate
+      .replace("{{email}}", email)
+      .replace("{{otp}}", otp)
+      .replace("{{url}}", url);
+
+    // Send verification email
+    await sendEmail(emailTemplate, "Verify Email", email);
+
+    // Create a new user instance with only email and OTP
+    const newUser = new User({
+      email,
+      otp, // Store the OTP in the user object
+    });
+
+    // Save the new user to the database
+    const savedUser = await newUser.save();
+
+    // Return success response
+    return successResMsg(res, 201, {
+      success: true,
+      user: savedUser,
+      message: "User created successfully. Please verify your email.",
+    });
+  } catch (error) {
+    console.error(error);
+    return errorResMsg(res, 500, {
+      error: error.message,
+      message: "Internal server error",
+    });
+  }
+};
 
 export const login = async (req, res, next) => {
   try {
