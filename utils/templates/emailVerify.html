@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OgunDigitalSummit</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        @font-face {
+            font-family: 'whyte';
+            src: url(whyte/Whyte-Regular.ttf);
+            font-weight: 400;
+        }
+        @font-face {
+            font-family: 'whyte';
+            src: url(whyte/Whyte-Medium.ttf);
+            font-weight: 500;
+        }
+        @font-face {
+            font-family: 'whyte';
+            src: url(whyte/Whyte-Bold.ttf);
+            font-weight: 700;
+        }
+        .heroine {
+            background-color: #EFF6FF;
+            font-family: whyte, sans-serif;
+            height: 100%;
+        }
+        .mother {
+            width: 860px;
+            background-color: #F9FAFF;
+            min-height: fit-content;
+            margin: auto;
+            margin-top: 100px;
+            margin-bottom: 100px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .header {
+            padding-top: 31px;
+            padding-bottom: 31px;
+            padding-left: 80px;
+            padding-right: 80px;
+            height: 117px;
+        }
+        .care {
+            float: left;
+            max-width: 223px;
+        }
+        .care img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .gram {
+            max-width: 120px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            float: right;
+        }
+        .gram img {
+            width: 20%;
+            height: auto;
+        }
+        .hero {
+            font-weight: 500;
+            background-color: #fff;
+            padding-left: 80px;
+            padding-right: 80px;
+        }
+        .greet {
+            font-size: 18px;
+            line-height: 24.75px;
+            color: #1453FF;
+            padding-top: 56px;
+            margin-bottom: 16px;
+        }
+        .heading-text {
+            font-size: 32px;
+            line-height: 41.6px;
+            color: #000;
+            margin-bottom: 24px;
+        }
+        .email {
+            max-width: 100%;
+        }
+        .email > img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .message {
+            padding-top: 24px;
+            padding-bottom: 78.42px;
+            padding-left: 80px;
+            padding-right: 80px;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 20.8px;
+            color: #2A2A2A;
+            background-color: #fff;
+        }
+        .message1 {
+            margin-bottom: 20px;
+        }
+        .message1 a {
+            text-decoration: none;
+        }
+        .message2 {
+            margin-bottom: 20px;
+        }
+        .verify-btn {
+            width: 239px;
+            border-radius: 8px;
+            height: 40px;
+            letter-spacing: 3%;
+            line-height: 1.5rem;
+            font-weight: 500;
+            font-size: 16px;
+            background-color: #1453FF;
+            color: #fff;
+            border: none;
+        }
+        .full {
+            padding-left: 80px;
+            padding-right: 80px;
+        }
+        .full-header {
+            padding-top: 31px;
+            height: 100px;
+        }
+        .foot-note {
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 15.48px;
+            text-align: center;
+            background-color: #F9FAFF;
+            width: 82%;
+            margin: auto;
+            padding-top: 85px;
+            padding-bottom: 54px;
+            text-align: center;
+        }
+        .reason, .address {
+            margin-bottom: 12px;
+        }
+        .reason a {
+            color: #1453FF;
+        }
+        @media screen and (max-width: 1024px) {
+            .mother {
+                margin-top: 50px;
+                margin-bottom: 50px;
+            }
+        }
+        @media screen and (max-width: 900px) {
+            .mother {
+                width: 90%;
+            }
+            .header,
+            .hero,
+            .message,
+            .full {
+                padding-left: 25px;
+                padding-right: 25px;
+            }
+        }
+        @media screen and (max-width: 468px) {
+            .mother {
+                width: 90%;
+                margin-top: 25px;
+                margin-bottom: 25px;
+            }
+            .header,
+            .hero,
+            .message,
+            .full {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+            .care {
+                max-width: 126px;
+            }
+            .gram {
+                padding-top: 4px;
+                padding-bottom: 4px;
+            }
+            .foot-note {
+                padding-top: 32px;
+                padding-bottom: 32px;
+            }
+        }
+    </style>
+</head>
+<body class="heroine">
+    <div class="mother">
+        <header class="header">
+            <div class="care">
+                <img src="https://res.cloudinary.com/grazac/image/upload/v1715677171/images/Full_Logo_PNG_2_yqoke8.png">
+            </div>
+            <div class="gram">
+                <img src="https://res.cloudinary.com/grazac/image/upload/v1715677173/images/ic_baseline-facebook_jg4gys.png">
+                <img src="https://res.cloudinary.com/grazac/image/upload/v1715677174/images/mdi_linkedin_szc0bi.png">
+                <img src="https://res.cloudinary.com/grazac/image/upload/v1715677175/images/mdi_twitter_dhkge5.png">
+                <img src="https://res.cloudinary.com/grazac/image/upload/v1715677174/images/mdi_instagram_sbi1rc.png">
+            </div>
+        </header>
+        <div class="hero">
+            <h1 class="greet">Hey {{firstName}},</h1>
+            <h2 class="heading-text">Verify Your Email!</h2>
+            <div class="email">
+                <img src="https://res.cloudinary.com/grazac/image/upload/v1716293060/email_yi9so2.png" alt="" />
+            </div>
+        </div>
+        <div class="message">
+            <p class="message1">Thank you for joining OgunDigitalSummit!<br/>Below is your otp: {{otp}}</p>
+            <a href={{url}}><button class="verify-btn">Verify Account</button></a>
+            <p class="message2">You're just one step away from exploring exciting digital opportunities in Ogun State!</p>
+        </div>
+        <div class="full">
+            <header class="full-header">
+                <div class="care">
+                    <img src="https://res.cloudinary.com/grazac/image/upload/v1715677171/images/Full_Logo_PNG_2_yqoke8.png">
+                </div>
+                <div class="gram">
+                    <img src="https://res.cloudinary.com/grazac/image/upload/v1715677173/images/ic_baseline-facebook_jg4gys.png">
+                    <img src="https://res.cloudinary.com/grazac/image/upload/v1715677174/images/mdi_linkedin_szc0bi.png">
+                    <img src="https://res.cloudinary.com/grazac/image/upload/v1715677175/images/mdi_twitter_dhkge5.png">
+                    <img src="https://res.cloudinary.com/grazac/image/upload/v1715677174/images/mdi_instagram_sbi1rc.png">
+                </div>
+            </header>
+            <footer class="foot-note">
+                <p class="reason">You are receiving this email because you signed up for updates about <a href="https://www.ogundigitalsummit.com/">OgunDigitalSummit</a>. If you prefer not to receive these emails, please unsubscribe <a href="#">here</a>.</p>
+                <p class="address">Ogun Digital Summit Team, 4th Floor, Abeokuta</p>
+                <p class="copyright">Copyright © 2024, OgunDigitalSummit. "OgunDigitalSummit" and its logo are registered trademarks of OgunDigitalSummit LLC.</p>
+            </footer>
+        </div>
+    </div>
+</body>
+</html>
