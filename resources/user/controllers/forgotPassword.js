@@ -111,3 +111,42 @@ export const resetPassword = async (req, res) => {
   }
 };
 
+export const resendOTP = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    // Check for the user and save the OTP
+    const user = await User.findOne({ email });
+    if (!user) {
+      // Handle the case when user is not found
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const otp = generateOTP(); // Generate new OTP
+    const url = `https://ogundigitalsummit.com/`;
+    const expiresAt = Date.now() + 3 * 60 * 1000; // OTP expires in 3 minutes
+
+    const htmlTemplate = fs.readFileSync(
+      path.join(__dirname, "../../../utils/email/resendOtp.html"),
+      "utf8"
+    );
+
+    const emailTemplate = htmlTemplate
+      .replace("{{email}}", email)
+      .replace("{{otp}}", otp)
+      .replace("{{url}}", url);
+
+    // Send a verification email
+    await sendEmail(emailTemplate, "Forgot Password Email", email);
+
+    // Save the new OTP and expiration time to the user object
+    user.otp = otp;
+    user.otpExpiresAt = expiresAt; // Store the expiration timestamp
+    await user.save();
+
+    res.status(200).json({ message: "OTP resent to email" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to resend OTP" });
+  }
+};
