@@ -122,12 +122,11 @@ export const createPassword = async (req, res, next) => {
     try {
         const { userId } = req.params;
         const { password, confirmPassword } = req.body;
-
         // Check if userId, password, and confirmPassword are provided
         if (!userId || !password || !confirmPassword) {
-            return errorResMsg(res, 400, "User ID, password, and confirm password are required");
+          return errorResMsg(res, 400, "User ID, password, and confirm password are required");
         }
-
+        
         // Find the user by userId
         const user = await User.findById(userId);
 
@@ -143,7 +142,7 @@ export const createPassword = async (req, res, next) => {
 
         // Hash the password
         const hashedPassword = await passwordHash(password);
-
+      
         // Update the user's password
         user.password = hashedPassword;
         await user.save();
