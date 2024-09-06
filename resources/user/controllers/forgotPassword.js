@@ -29,7 +29,7 @@ export const forgotPassword = async (req, res) => {
     const expiresAt = Date.now() + 3 * 60 * 1000; // OTP expires in 3 minutes
 
     const htmlTemplate = fs.readFileSync(
-      path.join(__dirname, "../../../utils/email/forgotPassword.html"),
+      path.join(__dirname, "../../../utils/templates/forgotPassword.html"),
       "utf8"
     );
 
@@ -127,7 +127,7 @@ export const resendOTP = async (req, res) => {
     const expiresAt = Date.now() + 3 * 60 * 1000; // OTP expires in 3 minutes
 
     const htmlTemplate = fs.readFileSync(
-      path.join(__dirname, "../../../utils/email/resendOtp.html"),
+      path.join(__dirname, "../../../utils/templates/resendOtp.html"),
       "utf8"
     );
 
