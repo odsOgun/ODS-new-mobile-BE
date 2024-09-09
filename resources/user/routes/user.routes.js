@@ -7,11 +7,11 @@ const router = express.Router();
 
 router.post("/signup", signUp);
 router.post("/login", login);
-router.put("/verify", verifyOTP);
-router.put("/resend", resendOTP);
-router.put("/create", createPassword);
-router.put("/forgot", forgotPassword);
-router.put("/reset/:userId", resetPassword);
+router.post("/verify", verifyOTP);
+router.post("/resend", resendOTP);
+router.post("/create", createPassword);
+router.post("/forgot", forgotPassword);
+router.post("/reset/:userId", resetPassword);
 
 
 
