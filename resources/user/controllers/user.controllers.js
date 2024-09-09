@@ -14,6 +14,33 @@ import { createJwtToken } from "../../../middleware/isAuthenticated.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+
+export const checkUserExists = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    // Check if email is provided
+    if (!email) {
+      return errorResMsg(res, 400, "Email is required");
+    }
+
+    // Check if the email is already registered
+    const checkEmail = await User.findOne({ email });
+    if (checkEmail) {
+      return successResMsg(res, 200, { registered: true });
+    } else {
+      return successResMsg(res, 200, { registered: false });
+    }
+  } catch (error) {
+    console.error(error);
+    return errorResMsg(res, 500, {
+      error: error.message,
+      message: "Internal server error",
+    });
+  }
+};
+
+
 export const signUp = async (req, res, next) => {
   try {
     const { email } = req.body;
