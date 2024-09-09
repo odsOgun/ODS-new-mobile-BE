@@ -119,10 +119,9 @@ export const login = async (req, res, next) => {
 
 export const createPassword = async (req, res, next) => {
   try {
-    const { userId } = req.params;
-    const { password, confirmPassword } = req.body;
+    const { password, email } = req.body;
     // Check if userId, password, and confirmPassword are provided
-    if (!userId || !password || !confirmPassword) {
+    if (!password || !email) {
       return errorResMsg(
         res,
         400,
@@ -131,20 +130,11 @@ export const createPassword = async (req, res, next) => {
     }
 
     // Find the user by userId
-    const user = await User.findById(userId);
+    const user = await User.findOne({email});
 
     // Check if the user exists
     if (!user) {
       return errorResMsg(res, 404, "User not found");
-    }
-
-    // Check if the password and confirm password match
-    if (password !== confirmPassword) {
-      return errorResMsg(
-        res,
-        400,
-        "Password and confirm password do not match"
-      );
     }
 
     // Hash the password

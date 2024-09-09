@@ -9,7 +9,7 @@ router.post("/signup", signUp);
 router.post("/login", login);
 router.put("/verify", verifyOTP);
 router.put("/resend", resendOTP);
-router.put("/create/:userId", createPassword);
+router.put("/create", createPassword);
 router.put("/forgot", forgotPassword);
 router.put("/reset/:userId", resetPassword);
 
