@@ -9,6 +9,7 @@ import path from "path";
 import generateOTP from "../../../utils/lib/OtpMessage.js";
 import sendEmail from "../../../utils/email/email-sender.js";
 import { createJwtToken } from "../../../middleware/isAuthenticated.js";
+import cloudinary from "../../../utils/image/cloudinary.js";
 
 // Define __dirname for ES6
 const __filename = fileURLToPath(import.meta.url);
@@ -232,6 +233,36 @@ export const editUserProfile = async (req, res, next) => {
     return errorResMsg(res, 500, {
       error: error.message,
       message: "Internal server error",
+    });
+  }
+};
+
+export const profilePic = async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.params.id });
+    if (!user) {
+      return errorResMsg(res, 400, "User not found");
+    }
+    const result = await cloudinary.v2.uploader.upload(req.file.path);
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      { profilePicture: result.secure_url },
+      {
+        upsert: true,
+        runValidators: true,
+        isNew: true, // immutable checker
+      }
+    );
+    // success response
+    return successResMsg(res, 200, {
+      success: true,
+      user: updatedUser,
+      message: "User profile picture updated successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return errorResMsg(res, 500, error.message, {
+      message: "internal server error",
     });
   }
 };
