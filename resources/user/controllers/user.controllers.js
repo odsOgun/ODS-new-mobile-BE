@@ -39,8 +39,6 @@ export const checkUserExists = async (req, res, next) => {
   }
 };
 
-
-
 export const signUp = async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -157,7 +155,7 @@ export const createPassword = async (req, res, next) => {
     }
 
     // Find the user by userId
-    const user = await User.findOne({email});
+    const user = await User.findOne({ email });
 
     // Check if the user exists
     if (!user) {
@@ -175,6 +173,59 @@ export const createPassword = async (req, res, next) => {
     return successResMsg(res, 200, {
       success: true,
       message: "Password created successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    return errorResMsg(res, 500, {
+      error: error.message,
+      message: "Internal server error",
+    });
+  }
+};
+
+export const editUserProfile = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const {
+      firstName,
+      lastName,
+      profilePicture,
+      placeOfWork,
+      aboutMe,
+      skills,
+      socialMedia,
+      externalLink,
+    } = req.body;
+
+    // Validate the presence of userId
+    if (!userId) {
+      return errorResMsg(res, 400, "User ID is required");
+    }
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+    if (!user) {
+      return errorResMsg(res, 404, "User not found");
+    }
+
+    // Update the user fields with the provided values
+    user.firstName = firstName || user.firstName;
+    user.lastName = lastName || user.lastName;
+    user.profilePicture = profilePicture || user.profilePicture;
+    user.placeOfWork = placeOfWork || user.placeOfWork;
+    user.aboutMe = aboutMe || user.aboutMe;
+    user.skills = skills || user.skills;
+    user.socialMedia = socialMedia || user.socialMedia;
+    user.externalLink = externalLink || user.externalLink;
+
+    // Save the updated user profile
+    const updatedUser = await user.save();
+
+    // Return success response
+    return successResMsg(res, 200, {
+      success: true,
+      user: updatedUser,
+      message: "User profile updated successfully",
     });
   } catch (error) {
     console.error(error);

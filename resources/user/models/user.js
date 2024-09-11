@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
     token: {
         type: String
     },
-    personalDetails: {
+    placeOfWork: {
         type: String
     },
     aboutMe: {

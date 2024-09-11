@@ -1,5 +1,5 @@
 import express from "express";
-import { checkUserExists, createPassword, login, signUp } from "../controllers/user.controllers.js";
+import { checkUserExists, createPassword, editUserProfile, login, signUp } from "../controllers/user.controllers.js";
 import { forgotPassword, resendOTP, resetPassword, verifyOTP } from "../controllers/forgotPassword.js";
 
 // write user routes logic here
@@ -13,6 +13,7 @@ router.post("/resend", resendOTP);
 router.post("/create", createPassword);
 router.post("/forgot", forgotPassword);
 router.post("/reset/:userId", resetPassword);
+router.put("/edit/:userId", editUserProfile);
 
 
 
