@@ -50,13 +50,47 @@ export const signUp = async (req, res, next) => {
     }
 
     // Check if the email is already registered
-    const checkEmail = await User.findOne({ email });
-    if (checkEmail) {
-      return errorResMsg(res, 400, "Email already registered");
+    const checkUser = await User.findOne({ email });
+    if (checkUser) {
+      // If the user exists and is not verified, resend OTP
+      if (!checkUser.isOTPVerified) {
+        // Generate OTP
+        const otp = generateOTP();
+        const url = `https://ogundigitalsummit.com/`;
+        const otpExpiresAt = Date.now() + 3 * 60 * 1000; // OTP expires in 3 minutes
+
+        // Load email template
+        const htmlTemplate = fs.readFileSync(
+          path.join(__dirname, "../../../utils/templates/emailVerify.html"),
+          "utf8"
+        );
+
+        // Replace placeholders with actual values
+        const emailTemplate = htmlTemplate
+          .replace("{{email}}", email)
+          .replace("{{otp}}", otp)
+          .replace("{{url}}", url);
+
+        // Send verification email
+        await sendEmail(emailTemplate, "Verify Email", email);
+
+        // Update user's OTP and expiration in the database
+        checkUser.otp = otp;
+        checkUser.otpExpiresAt = otpExpiresAt;
+        await checkUser.save();
+
+        return successResMsg(res, 200, {
+          success: true,
+          message: "User already exists but is not verified. OTP resent.",
+        });
+      }
+
+      // If the email is already verified
+      return errorResMsg(res, 400, "Email already registered and verified");
     }
 
-    // Generate OTP
-    const otp = generateOTP(); // Generate OTP using the imported function
+    // Generate OTP for new user
+    const otp = generateOTP();
     const url = `https://ogundigitalsummit.com/`;
     const otpExpiresAt = Date.now() + 3 * 60 * 1000; // OTP expires in 3 minutes
 
@@ -75,10 +109,10 @@ export const signUp = async (req, res, next) => {
     // Send verification email
     await sendEmail(emailTemplate, "Verify Email", email);
 
-    // Create a new user instance with only email and OTP
+    // Create a new user instance with email, OTP, and expiration
     const newUser = new User({
       email,
-      otp, // Store the OTP in the user object
+      otp,
       otpExpiresAt,
     });
 
