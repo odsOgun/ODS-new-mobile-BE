@@ -54,32 +54,37 @@ export const forgotPassword = async (req, res) => {
 };
 
 export const verifyOTP = async (req, res) => {
-    const { otp } = req.body; // Extract otp from request body
-  
-    try {
-      // Find user by OTP instead of userId
-      const user = await User.findOne({ otp });
-  
-      if (!user) {
-        return res.status(404).json({ message: "User not found or invalid OTP" });
-      }
-  
-      // Check if the OTP is not expired
-      if (user.otpExpiresAt > Date.now()) {
-        user.otp = null; // Clear OTP after successful verification
-        user.otpExpiresAt = null;
-        await user.save();
-  
-        return res.status(200).json({ message: "OTP verified successfully" });
-      } else {
-        return res.status(400).json({ message: "Invalid or expired OTP" });
-      }
-    } catch (error) {
-      console.error("Error during OTP verification:", error);
-      return res.status(500).json({ message: "OTP verification failed" });
+  const { otp } = req.body; // Extract OTP from request body
+
+  try {
+    // Find user by OTP instead of userId
+    const user = await User.findOne({ otp });
+
+    if (!user) {
+      return errorResMsg(res, 404, "User not found or invalid OTP");
     }
-  };
-  
+
+    // Check if the OTP is not expired
+    if (user.otpExpiresAt > Date.now()) {
+      user.otp = null; // Clear OTP after successful verification
+      user.otpExpiresAt = null;
+      await user.save();
+
+      // Use the custom success response
+      return successResMsg(res, 201, {
+        success: true,
+        user,
+        message: "User created successfully. Please verify your email.",
+      });
+    } else {
+      return errorResMsg(res, 401, "Invalid or expired OTP");
+    }
+  } catch (error) {
+    console.error("Error during OTP verification:", error);
+    return errorResMsg(res, 500, "OTP verification failed");
+  }
+};
+
 export const resetPassword = async (req, res) => {
   const { password, confirmPassword } = req.body;
   const { userId } = req.params;
