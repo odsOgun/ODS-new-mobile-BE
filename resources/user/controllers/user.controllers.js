@@ -58,6 +58,7 @@ export const signUp = async (req, res, next) => {
     // Generate OTP
     const otp = generateOTP(); // Generate OTP using the imported function
     const url = `https://ogundigitalsummit.com/`;
+    const otpExpiresAt = Date.now() + 3 * 60 * 1000; // OTP expires in 3 minutes
 
     // Load email template
     const htmlTemplate = fs.readFileSync(
@@ -78,6 +79,7 @@ export const signUp = async (req, res, next) => {
     const newUser = new User({
       email,
       otp, // Store the OTP in the user object
+      otpExpiresAt,
     });
 
     // Save the new user to the database
