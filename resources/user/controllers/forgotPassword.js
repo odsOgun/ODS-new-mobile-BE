@@ -73,8 +73,7 @@ export const verifyOTP = async (req, res) => {
       // Use the custom success response
       return successResMsg(res, 201, {
         success: true,
-        user,
-        message: "User created successfully. Please verify your email.",
+        message: "OTP Verified Successfully",
       });
     } else {
       return errorResMsg(res, 401, "Invalid or expired OTP");
