@@ -302,3 +302,35 @@ export const profilePic = async (req, res) => {
     });
   }
 };
+
+export const getUserDetails = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+
+    // Validate the presence of userId
+    if (!userId) {
+      return errorResMsg(res, 400, "User ID is required");
+    }
+
+    // Find the user by ID
+    const user = await User.findById(userId).select("-password -otp -otpExpiresAt");
+
+    // Check if the user exists
+    if (!user) {
+      return errorResMsg(res, 404, "User not found");
+    }
+
+    // Return success response with user details
+    return successResMsg(res, 200, {
+      success: true,
+      user,
+      message: "User details retrieved successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    return errorResMsg(res, 500, {
+      error: error.message,
+      message: "Internal server error",
+    });
+  }
+};

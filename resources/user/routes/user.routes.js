@@ -3,6 +3,7 @@ import {
   checkUserExists,
   createPassword,
   editUserProfile,
+  getUserDetails,
   login,
   profilePic,
   signUp,
@@ -18,6 +19,7 @@ import upload from "../../../utils/image/multer.js";
 // write user routes logic here
 const router = express.Router();
 
+router.get("/details/:userId", getUserDetails);
 router.post("/get", checkUserExists);
 router.post("/signup", signUp);
 router.post("/login", login);
