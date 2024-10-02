@@ -1,59 +1,69 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema(
+  {
     email: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
     firstName: {
-        type: String,
-        // required: true
+      type: String,
+      // required: true
     },
     lastName: {
-        type: String,
-        // required: true
+      type: String,
+      // required: true
     },
     profilePicture: {
-        type: String
+      type: String,
+      default:
+        "https://res.cloudinary.com/grazac/image/upload/v1719308203/lol_k_gprc9r.jpg",
+    },
+    jobTitle: {
+      type: String,
     },
     password: {
-        type: String
+      type: String,
     },
     token: {
-        type: String
+      type: String,
     },
     placeOfWork: {
-        type: String
+      type: String,
     },
     aboutMe: {
-        type: String
+      type: String,
     },
     otpExpiresAt: {
-        type: Date, // Use Date for timestamp
-      },
+      type: Date, // Use Date for timestamp
+    },
     isOTPVerified: {
-        type: Boolean,
-        default: "false"
+      type: Boolean,
+      default: "false",
     },
     otp: {
-        type: Number,
+      type: Number,
     },
     skills: {
-        type: [String]
+      type: [String],
     },
-    socialMedia: {
-        type: [String]
+    linkedIn: {
+      type: String,
+    },
+    twitterLink: {
+      type: String,
     },
     externalLink: {
-        type: [String]
-    }
-},
-{
-  timestamps: true,
-  versionKey: false,
-});
+      type: [String],
+    },
+  },
+  {
+    timestamps: true,
+    versionKey: false,
+  }
+);
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 export default User;

@@ -230,8 +230,9 @@ export const editUserProfile = async (req, res, next) => {
       placeOfWork,
       aboutMe,
       skills,
-      socialMedia,
-      externalLink,
+      twitterLink,
+      linkedIn,
+      jobTitle,
     } = req.body;
 
     // Validate the presence of userId
@@ -251,9 +252,10 @@ export const editUserProfile = async (req, res, next) => {
     user.profilePicture = profilePicture || user.profilePicture;
     user.placeOfWork = placeOfWork || user.placeOfWork;
     user.aboutMe = aboutMe || user.aboutMe;
+    user.jobTitle = jobTitle || user.jobTitle;
     user.skills = skills || user.skills;
-    user.socialMedia = socialMedia || user.socialMedia;
-    user.externalLink = externalLink || user.externalLink;
+    user.twitterLink = twitterLink || user.twitterLink;
+    user.linkedIn = linkedIn || user.linkedIn;
 
     // Save the updated user profile
     const updatedUser = await user.save();

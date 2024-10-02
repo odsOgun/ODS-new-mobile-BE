@@ -1,5 +1,6 @@
 import express from "express";
 import userRoute from "./resources/user/routes/user.routes.js";
+import eventRoute from "./resources/user/routes/event.routes.js";
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/dashboard", eventRoute);
 
 
 export default app;

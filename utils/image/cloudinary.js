@@ -1,5 +1,5 @@
-import * as cloudinary from 'cloudinary'
-
+// cloudinaryConfig.js
+import * as cloudinary from 'cloudinary';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
