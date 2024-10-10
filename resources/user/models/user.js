@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema(
   {
@@ -9,11 +9,9 @@ const userSchema = new mongoose.Schema(
     },
     firstName: {
       type: String,
-      // required: true
     },
     lastName: {
       type: String,
-      // required: true
     },
     profilePicture: {
       type: String,
@@ -36,11 +34,11 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
     otpExpiresAt: {
-      type: Date, // Use Date for timestamp
+      type: Date,
     },
     isOTPVerified: {
       type: Boolean,
-      default: "false",
+      default: false,
     },
     otp: {
       type: Number,
@@ -57,6 +55,12 @@ const userSchema = new mongoose.Schema(
     externalLink: {
       type: [String],
     },
+    connections: [
+      {
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        status: { type: String, enum: ['pending', 'accepted'], default: 'pending' },
+      },
+    ],
   },
   {
     timestamps: true,
@@ -64,6 +68,4 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-const User = mongoose.model("User", userSchema);
-
-export default User;
+export default mongoose.model('User', userSchema);

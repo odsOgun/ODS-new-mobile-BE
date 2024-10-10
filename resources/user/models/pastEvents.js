@@ -128,8 +128,8 @@ const eventSchema = new mongoose.Schema({
     default: ["https://res.cloudinary.com/grazac/image/upload/v1719308203/lol_k_gprc9r.jpg"]
   },
   videos: {
-    type: [String], // Array of video URLs for event recordings
-    default: ["https://res.cloudinary.com/grazac/image/upload/v1719308203/lol_k_gprc9r.jpg"]
+    type: String, // Array of video URLs for event recordings
+    default: "https://res.cloudinary.com/grazac/image/upload/v1719308203/lol_k_gprc9r.jpg"
   },
   createdAt: {
     type: Date,

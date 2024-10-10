@@ -315,7 +315,9 @@ export const getUserDetails = async (req, res, next) => {
     }
 
     // Find the user by ID
-    const user = await User.findById(userId).select("-password -otp -otpExpiresAt");
+    const user = await User.findById(userId).select(
+      "-password -otp -otpExpiresAt"
+    );
 
     // Check if the user exists
     if (!user) {
@@ -330,6 +332,143 @@ export const getUserDetails = async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
+    return errorResMsg(res, 500, {
+      error: error.message,
+      message: "Internal server error",
+    });
+  }
+};
+
+export const sendConnectionRequest = async (req, res) => {
+  try {
+    const { userId } = req.params; // ID of the user to connect with
+    const requesterId = req.user.userId; // ID of the current logged-in user
+    console.log(requesterId);
+
+    // Check if the user already has a pending or accepted connection with the target user
+    const user = await User.findById(requesterId);
+    const existingConnection = user.connections.find(
+      (connection) => connection.userId.toString() === userId
+    );
+
+    if (existingConnection) {
+      return errorResMsg(res, 400, "Connection already exists");
+    }
+
+    // Add the connection to both users
+    await User.findByIdAndUpdate(requesterId, {
+      $push: { connections: { userId, status: "pending" } },
+    });
+
+    await User.findByIdAndUpdate(userId, {
+      $push: { connections: { userId: requesterId, status: "pending" } },
+    });
+
+    return successResMsg(res, 200, {
+      success: true,
+      user,
+      message: "Connection request sent successfully",
+    });
+  } catch (error) {
+    return errorResMsg(res, 500, {
+      error: error.message,
+      message: "Internal server error",
+    });
+  }
+};
+
+export const acceptConnectionRequest = async (req, res) => {
+  try {
+    const { userId } = req.params; // ID of the user whose request is being accepted
+    const accepterId = req.user.userId; // ID of the current logged-in user
+
+    // Update both users' connection statuses to 'accepted'
+    await User.updateOne(
+      { _id: accepterId, "connections.userId": userId },
+      { $set: { "connections.$.status": "accepted" } }
+    );
+
+    await User.updateOne(
+      { _id: userId, "connections.userId": accepterId },
+      { $set: { "connections.$.status": "accepted" } }
+    );
+    return successResMsg(res, 200, {
+      success: true,
+      message: "Connection request accepted successfully",
+    });
+  } catch (error) {
+    return errorResMsg(res, 500, {
+      error: error.message,
+      message: "Internal server error",
+    });
+  }
+};
+
+export const getConnectedUsers = async (req, res) => {
+  try {
+    const userId = req.user.userId; // ID of the logged-in user
+
+    const user = await User.findById(userId).populate({
+      path: "connections.userId",
+      select: "firstName lastName profilePicture jobTitle", // Only select these fields
+    });
+
+    const connectedUsers = user.connections.filter(
+      (connection) => connection.status === "accepted"
+    );
+    return successResMsg(res, 200, {
+      success: true,
+      connectedUsers,
+      message: "Connected users retrieved successfully",
+    });
+  } catch (error) {
+    return errorResMsg(res, 500, {
+      error: error.message,
+      message: "Internal server error",
+    });
+  }
+};
+
+export const getPendingConnections = async (req, res) => {
+  try {
+    const userId = req.user.userId; // ID of the logged-in user
+
+    const user = await User.findById(userId).populate({
+      path: "connections.userId",
+      select: "firstName lastName profilePicture jobTitle", // Only select these fields
+    });
+
+    const pendingConnections = user.connections.filter(
+      (connection) => connection.status === "pending"
+    );
+
+    return successResMsg(res, 200, {
+      success: true,
+      pendingConnections,
+      message: "Pending connections retrieved successfully",
+    });
+  } catch (error) {
+    return errorResMsg(res, 500, {
+      error: error.message,
+      message: "Internal server error",
+    });
+  }
+};
+
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select("-password -otp -otpExpiresAt");
+
+    if (!users.length) {
+      return errorResMsg(res, 404, "No users found");
+    }
+
+    return successResMsg(res, 200, {
+      users,
+      message: "Users retrieved successfully",
+    });
+  } catch (error) {
     return errorResMsg(res, 500, {
       error: error.message,
       message: "Internal server error",
