@@ -458,20 +458,29 @@ export const getPendingConnections = async (req, res) => {
 
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().select("-password -otp -otpExpiresAt");
+    // Fetch all users who have isOtpVerified set to true, excluding password and OTP fields
+    const users = await User.find({ isOTPVerified: true }).select("-password -otp -otpExpiresAt");
 
+    // Check if no users are found
     if (!users.length) {
-      return errorResMsg(res, 404, "No users found");
+      return res.status(404).json({
+        success: false,
+        message: "No users found",
+      });
     }
 
-    return successResMsg(res, 200, {
-      users,
+    // Return the users if found
+    return res.status(200).json({
+      success: true,
       message: "Users retrieved successfully",
+      data: users,
     });
   } catch (error) {
-    return errorResMsg(res, 500, {
-      error: error.message,
+    // Return an error message in case of failure
+    return res.status(500).json({
+      success: false,
       message: "Internal server error",
+      error: error.message,
     });
   }
 };

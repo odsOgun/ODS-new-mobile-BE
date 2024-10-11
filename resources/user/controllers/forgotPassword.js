@@ -68,6 +68,7 @@ export const verifyOTP = async (req, res) => {
     if (user.otpExpiresAt > Date.now()) {
       user.otp = null; // Clear OTP after successful verification
       user.otpExpiresAt = null;
+      user.isOTPVerified = true;
       await user.save();
 
       // Use the custom success response
