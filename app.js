@@ -1,6 +1,7 @@
 import express from "express";
 import http from "http"; // Required for setting up socket.io
 import { Server } from "socket.io";
+import bodyParser from "body-parser"
 import cors from "cors"; // Add this if you want CORS in Express
 import userRoute from "./resources/user/routes/user.routes.js";
 import eventRoute from "./resources/user/routes/event.routes.js";
@@ -26,8 +27,9 @@ const io = new Server(server, {
 
 // Middleware for Express
 app.use(cors()); // Allow CORS for the Express API
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Increase the limit for incoming requests
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 // // Socket.IO connection
 // io.on("connection", (socket) => {
@@ -102,9 +104,9 @@ app.use(express.urlencoded({ extended: true }));
 //   }
 // });
 
-// app.get("/", (req, res) => {
-//   res.send("Welcome to ODS 2024 API");
-// });
+app.get("/", (req, res) => {
+  res.send("Welcome to ODS 2024 API");
+});
 
 
 // Socket.IO connection handling
