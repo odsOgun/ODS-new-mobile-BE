@@ -404,6 +404,34 @@ export const acceptConnectionRequest = async (req, res) => {
   }
 };
 
+export const declineConnectionRequest = async (req, res) => {
+  try {
+    const { userId } = req.params; // ID of the user whose request is being declined
+    const declinerId = req.user.userId; // ID of the current logged-in user
+
+    // Update both users' connection statuses to 'declined'
+    await User.updateOne(
+      { _id: declinerId, "connections.userId": userId },
+      { $set: { "connections.$.status": "declined" } }
+    );
+
+    await User.updateOne(
+      { _id: userId, "connections.userId": declinerId },
+      { $set: { "connections.$.status": "declined" } }
+    );
+
+    return successResMsg(res, 200, {
+      success: true,
+      message: "Connection request declined successfully",
+    });
+  } catch (error) {
+    return errorResMsg(res, 500, {
+      error: error.message,
+      message: "Internal server error",
+    });
+  }
+};
+
 export const getConnectedUsers = async (req, res) => {
   try {
     const userId = req.user.userId; // ID of the logged-in user

@@ -58,7 +58,7 @@ const userSchema = new mongoose.Schema(
     connections: [
       {
         userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-        status: { type: String, enum: ['pending', 'accepted'], default: 'pending' },
+        status: { type: String, enum: ['pending', 'accepted', "declined"], default: 'pending' },
       },
     ],
   },

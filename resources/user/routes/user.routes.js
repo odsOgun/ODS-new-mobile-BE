@@ -3,6 +3,7 @@ import {
   acceptConnectionRequest,
   checkUserExists,
   createPassword,
+  declineConnectionRequest,
   editUserProfile,
   getAllUsers,
   getConnectedUsers,
@@ -44,6 +45,7 @@ router.put("/reset/:userId", resetPassword);
 // Connection management
 router.put("/:userId/connect", isAuthenticated, sendConnectionRequest);
 router.put("/:userId/accept-connection", isAuthenticated, acceptConnectionRequest);
+router.put("/:userId/decline-connection", isAuthenticated, declineConnectionRequest);
 router.get("/connected", isAuthenticated, getConnectedUsers);
 router.get("/pending-connect", isAuthenticated, getPendingConnections);
 
