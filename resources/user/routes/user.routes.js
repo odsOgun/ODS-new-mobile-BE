@@ -51,7 +51,7 @@ router.get("/pending-connect", isAuthenticated, getPendingConnections);
 
 // General user-related routes
 router.post("/get", checkUserExists);
-router.get("/users", getAllUsers);
+router.get("/:userId/users", getAllUsers);
 
 
 export default router;

@@ -229,6 +229,7 @@ export const editUserProfile = async (req, res, next) => {
       profilePicture,
       placeOfWork,
       aboutMe,
+      socialMedia,
       skills,
       twitterLink,
       linkedIn,
@@ -253,9 +254,14 @@ export const editUserProfile = async (req, res, next) => {
     user.placeOfWork = placeOfWork || user.placeOfWork;
     user.aboutMe = aboutMe || user.aboutMe;
     user.jobTitle = jobTitle || user.jobTitle;
-    user.skills = skills || user.skills;
+    user.socialMedia = socialMedia || user.socialMedia;
     user.twitterLink = twitterLink || user.twitterLink;
     user.linkedIn = linkedIn || user.linkedIn;
+
+    // Append new skills to existing skills if provided
+    if (skills) {
+      user.skills = [...new Set([...user.skills, ...skills])];
+    }
 
     // Save the updated user profile
     const updatedUser = await user.save();
@@ -274,7 +280,6 @@ export const editUserProfile = async (req, res, next) => {
     });
   }
 };
-
 export const profilePic = async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.params.id });
@@ -486,8 +491,10 @@ export const getPendingConnections = async (req, res) => {
 
 export const getAllUsers = async (req, res) => {
   try {
-    // Fetch all users who have isOtpVerified set to true, excluding password and OTP fields
-    const users = await User.find({ isOTPVerified: true }).select("-password -otp -otpExpiresAt");
+    const { userId } = req.params; // Extract userId from request parameters
+
+    // Fetch all users who have isOTPVerified set to true, excluding the user with the provided userId
+    const users = await User.find({ isOTPVerified: true, _id: { $ne: userId } }).select("-password -otp -otpExpiresAt");
 
     // Check if no users are found
     if (!users.length) {

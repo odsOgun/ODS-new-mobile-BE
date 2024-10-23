@@ -13,6 +13,9 @@ const userSchema = new mongoose.Schema(
     lastName: {
       type: String,
     },
+    phoneNumber: {
+      type: String,
+    },
     profilePicture: {
       type: String,
       default:
@@ -44,6 +47,9 @@ const userSchema = new mongoose.Schema(
       type: Number,
     },
     skills: {
+      type: [String],
+    },
+    socialMedia: {
       type: [String],
     },
     linkedIn: {
