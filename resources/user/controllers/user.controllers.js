@@ -10,7 +10,7 @@ import generateOTP from "../../../utils/lib/OtpMessage.js";
 import sendEmail from "../../../utils/email/email-sender.js";
 import { createJwtToken } from "../../../middleware/isAuthenticated.js";
 import cloudinary from "../../../utils/image/cloudinary.js";
-
+ 
 // Define __dirname for ES6
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
